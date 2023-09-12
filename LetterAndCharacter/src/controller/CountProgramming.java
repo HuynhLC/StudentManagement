@@ -2,15 +2,12 @@ package controller;
 
 import common.Library;
 import java.util.LinkedHashMap;
+import java.util.StringTokenizer;
 import view.Menu;
 
-/**
- *
- * @author ACER
- */
 public class CountProgramming extends Menu<String> {
-    
-    static String[] mc = {"Letter and Charator Count", "Convert base number", "Exit"};
+
+    static String[] mc = {"Letter and Character Count", "Convert base number", "Exit"};
     String str;
     Library l;
 
@@ -19,7 +16,7 @@ public class CountProgramming extends Menu<String> {
         l = new Library();
         str = l.getString("Input string: ");
     }
-    
+
     @Override
     public void execute(int n) {
         switch (n) {
@@ -28,47 +25,42 @@ public class CountProgramming extends Menu<String> {
                 break;
             case 2:
                 str = str.replaceAll("\\s+", "");
-                countCharater(str);
+                countCharacter(str);
                 break;
             case 3:
                 System.exit(0);
         }
     }
-    
+
     public void countLetter(String str) {
-        LinkedHashMap<String, Integer> lhm = new LinkedHashMap<String, Integer>();
-        String[] strSplit = str.split("\\s");
-        for (int i = 0; i < strSplit.length; i++) {
-            String ch = strSplit[i];
-            int count = 0;
-            for (int j = 0; j < strSplit.length; j++) {
-                if (strSplit[j].equals(ch)) {
-                    count++;
-                }
-            }
-            lhm.put(ch, count);
-        }
+        LinkedHashMap<String, Integer> lhm = new LinkedHashMap<>();
+        StringTokenizer tokenizer = new StringTokenizer(str," \t\n\r\f!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~");
         
+        while (tokenizer.hasMoreTokens()) {
+            String word = tokenizer.nextToken();
+            int count = lhm.getOrDefault(word, 0);
+            lhm.put(word, count + 1);
+        }
+
         lhm.forEach((key, value) -> {
             System.out.println(key + " -> " + value);
         });
     }
-    
-     public void countCharater(String str) {
-        LinkedHashMap<String, Integer> lhm = new LinkedHashMap<String, Integer>();
+
+    public void countCharacter(String str) {
+        LinkedHashMap<Character, Integer> lhm = new LinkedHashMap<>();
+
         for (int i = 0; i < str.length(); i++) {
             char ch = str.charAt(i);
-            int count = 0;
-            for (int j = 0; j < str.length(); j++) {
-                if (str.charAt(j)==ch) {
-                    count++;
-                }
+            if (Character.isLetterOrDigit(ch)) { 
+                int count = lhm.getOrDefault(ch, 0);
+                lhm.put(ch, count + 1);
             }
-            lhm.put(ch+"", count);
         }
-        
+
         lhm.forEach((key, value) -> {
             System.out.println(key + " -> " + value);
         });
     }
 }
+ 
